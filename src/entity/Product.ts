@@ -1,6 +1,6 @@
 import { Check, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { DescEntry, Entry } from "./Entry";
-import { File } from "./File";
+import { FileData } from "./File";
 import { Gallery } from "./Gallery";
 import { Tag } from "./Tag";
 import { IsNotEmpty, ValidateIf } from "class-validator";
@@ -11,12 +11,12 @@ import { Field, ObjectType } from "type-graphql";
 @Entity("products")
 //@Check("(fileId IS NULL) != (galleryId IS NULL)")
 export class Product extends DescEntry {
-    @Field(type => File, { nullable: true })
-    @OneToOne((type) => File, (file) => file.product, { nullable: true })
+    @Field(type => FileData, { nullable: true })
+    @OneToOne((type) => FileData, (file) => file.product, { nullable: true })
     @JoinColumn()
     @IsNotEmpty()
     @ValidateIf(p => !p.gallery)
-    file?: File | null
+    file?: FileData | null
     @Field(type => Gallery, { nullable: true })
     @OneToOne((type) => Gallery, (gallery) => gallery.product, { nullable: true })
     @JoinColumn()

@@ -1,17 +1,17 @@
 import { Resolver, Query, Arg, Mutation } from "type-graphql";
-import { File, Image, Video } from "../entity/File";
+import { FileData, Image, Video } from "../entity/File";
 import { AppDataSource } from "../data-source";
 import { CreateImageInput, CreateVideoInput } from "../inputs/File";
 
-@Resolver(of => File)
+@Resolver(of => FileData)
 class FileResolver {
-    @Query(() => File)
+    @Query(() => FileData)
     async file(@Arg("id") id: string) {
-        return await AppDataSource.getRepository(File).findOne({ where: { id } })
+        return await AppDataSource.getRepository(FileData).findOne({ where: { id } })
     }
-    @Query(() => [File])
+    @Query(() => [FileData])
     async files() {
-        return await AppDataSource.getRepository(File).find();
+        return await AppDataSource.getRepository(FileData).find();
     }
     @Query(() => [Image])
     async images() {

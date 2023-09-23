@@ -9,7 +9,7 @@ import { InterfaceType, Field, ObjectType, Int } from 'type-graphql';
 @Entity("files")
 @TableInheritance({ column: { type: "varchar", name: "type" } })
 @Check("(type = 'Image' AND file_type IN ('png', 'jpg', 'gif', 'avif', 'webp')) OR (type = 'Video' AND file_type IN ('png', 'jpg', 'gif', 'avif', 'webp'))")
-export abstract class File extends NamedEntry {
+export abstract class FileData extends NamedEntry {
     @Field()
     @Column({ type: "varchar" })
     url: string
@@ -36,17 +36,17 @@ export abstract class File extends NamedEntry {
     product?: Product | null
 }
 
-@ObjectType({ implements: [File, NamedEntry, Entry] })
+@ObjectType({ implements: [FileData, NamedEntry, Entry] })
 @ChildEntity()
-export class Image extends File {
+export class Image extends FileData {
     @Field(type => String, { nullable: true })
     @Column({ type: "varchar", nullable: true })
     alt?: string | null
 }
 
-@ObjectType({ implements: [File, NamedEntry, Entry] })
+@ObjectType({ implements: [FileData, NamedEntry, Entry] })
 @ChildEntity()
-export class Video extends File {
+export class Video extends FileData {
     @Field(type => String, { nullable: true })
     @Column({ type: "interval", nullable: true })
     duration?: IPostgresInterval | null

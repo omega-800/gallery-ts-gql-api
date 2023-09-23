@@ -12,9 +12,9 @@ export abstract class Entry {
     @Field()
     @UpdateDateColumn({ type: "timestamptz" })
     date_updated: Date
-    @Field()
-    @DeleteDateColumn({ type: "timestamptz" })
-    date_deleted: Date
+    @Field(type => Date, { nullable: true })
+    @DeleteDateColumn({ type: "timestamptz", nullable: true })
+    date_deleted?: Date | null
 }
 
 @InterfaceType(/* { implements: Entry } */)
@@ -35,7 +35,7 @@ export abstract class DescEntry extends Entry {
 }
 
 @InterfaceType(/* { implements: Entry } */)
-export abstract class StrictNamedEntry extends Entry {
+export abstract class UniqueNamedEntry extends Entry {
     @Field()
     @Column({ type: "varchar", length: 200, unique: true })
     name: string
