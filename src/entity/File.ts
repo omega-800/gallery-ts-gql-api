@@ -8,7 +8,7 @@ import { InterfaceType, Field, ObjectType, Int } from 'type-graphql';
 @InterfaceType({ implements: [NamedEntry, Entry] })
 @Entity("files")
 @TableInheritance({ column: { type: "varchar", name: "type" } })
-@Check("(type = 'Image' AND file_type IN ('png', 'jpg', 'gif', 'avif', 'webp')) OR (type = 'Video' AND file_type IN ('png', 'jpg', 'gif', 'avif', 'webp'))")
+@Check("(type = 'Image' AND file_type IN ('png', 'jpg', 'gif', 'avif', 'webp')) OR (type = 'Video' AND file_type IN ('mp4', 'mov'))")
 export abstract class FileData extends NamedEntry {
     @Field()
     @Column({ type: "varchar" })

@@ -1,7 +1,8 @@
-import { InputType, Field, Int } from "type-graphql";
+import { InputType, Field, Int, ID } from "type-graphql";
 import { Gallery } from "../entity/Gallery";
 import { Product } from "../entity/Product";
 import { IPostgresInterval } from 'postgres-interval';
+import { MaxLength } from "class-validator";
 
 /*
 @InputType()
@@ -29,6 +30,7 @@ export class CreateFileInput {
 @InputType()
 export class CreateImageInput {
     @Field(type => String, { nullable: true })
+    @MaxLength(200)
     name?: string | null
     @Field(type => String, { nullable: true })
     alt?: string | null
@@ -44,15 +46,16 @@ export class CreateImageInput {
     width: number
     @Field(type => Int)
     height: number
-    /* @Field(type => [Gallery], { nullable: "itemsAndList" })
-    galleries?: Gallery[] | null;
-    @Field(type => Product, { nullable: true })
-    product?: Product | null */
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    gallery_ids?: string[] | null;
+    @Field(type => ID, { nullable: true })
+    product_id?: string | null
 }
 
 @InputType()
 export class CreateVideoInput {
     @Field(type => String, { nullable: true })
+    @MaxLength(200)
     name?: string | null
     @Field(type => String, { nullable: true })
     duration?: IPostgresInterval | null
@@ -68,8 +71,8 @@ export class CreateVideoInput {
     width: number
     @Field(type => Int)
     height: number
-    /* @Field(type => [Gallery], { nullable: "itemsAndList" })
-    galleries?: Gallery[] | null;
-    @Field(type => Product, { nullable: true })
-    product?: Product | null */
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    gallery_ids?: string[] | null;
+    @Field(type => ID, { nullable: true })
+    product_id?: string | null
 }
