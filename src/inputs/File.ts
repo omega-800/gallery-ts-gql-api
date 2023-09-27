@@ -1,31 +1,5 @@
-import { InputType, Field, Int, ID } from "type-graphql";
-import { Gallery } from "../entity/Gallery";
-import { Product } from "../entity/Product";
-import { IPostgresInterval } from 'postgres-interval';
+import { InputType, Field, Int, ID, Float } from "type-graphql";
 import { MaxLength } from "class-validator";
-
-/*
-@InputType()
-export class CreateFileInput {
-    @Field(type => String, { nullable: true })
-    name?: string | null
-    @Field()
-    url: string
-    @Field()
-    preview_url: string
-    @Field()
-    file_type: string
-    @Field()
-    file_name: string
-    @Field(type => Int)
-    width: number
-    @Field(type => Int)
-    height: number
-    @Field(type => [Gallery], { nullable: "itemsAndList" })
-    galleries?: Gallery[] | null;
-    @Field(type => Product, { nullable: true })
-    product?: Product | null 
-}*/
 
 @InputType()
 export class CreateImageInput {
@@ -34,22 +8,36 @@ export class CreateImageInput {
     name?: string | null
     @Field(type => String, { nullable: true })
     alt?: string | null
-    @Field()
+    /*@Field()
     url: string
     @Field()
-    preview_url: string
+    preview_url: string*/
     @Field()
     file_type: string
     @Field()
     file_name: string
+    @Field()
+    file_name_orig: string
+    @Field(type => Float)
+    size: number
     @Field(type => Int)
     width: number
     @Field(type => Int)
     height: number
+    @Field(type => Int)
+    width_prev: number
+    @Field(type => Int)
+    height_prev: number
+    @Field(type => Boolean, { nullable: true })
+    edited?: boolean | null
+    @Field(type => Boolean, { nullable: true })
+    favorite?: boolean | null
     @Field(type => [ID], { nullable: "itemsAndList" })
     gallery_ids?: string[] | null;
-    @Field(type => ID, { nullable: true })
-    product_id?: string | null
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    shop_item_ids?: string[] | null
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    tag_ids?: string[] | null
 }
 
 @InputType()
@@ -57,22 +45,40 @@ export class CreateVideoInput {
     @Field(type => String, { nullable: true })
     @MaxLength(200)
     name?: string | null
-    @Field(type => String, { nullable: true })
-    duration?: IPostgresInterval | null
-    @Field()
+    @Field(type => Float)
+    duration: number
+    /*@Field()
     url: string
     @Field()
-    preview_url: string
+    preview_url: string*/
     @Field()
     file_type: string
     @Field()
     file_name: string
+    @Field()
+    file_name_orig: string
+    @Field(type => Float)
+    size: number
     @Field(type => Int)
     width: number
     @Field(type => Int)
     height: number
+    @Field(type => Int)
+    width_prev: number
+    @Field(type => Int)
+    height_prev: number
+    @Field(type => Float)
+    fps: number
+    @Field(type => Float)
+    fps_prev: number
+    @Field(type => Boolean, { nullable: true })
+    edited?: boolean | null
+    @Field(type => Boolean, { nullable: true })
+    favorite?: boolean | null
     @Field(type => [ID], { nullable: "itemsAndList" })
     gallery_ids?: string[] | null;
-    @Field(type => ID, { nullable: true })
-    product_id?: string | null
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    shop_item_ids?: string[] | null
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    tag_ids?: string[] | null
 }

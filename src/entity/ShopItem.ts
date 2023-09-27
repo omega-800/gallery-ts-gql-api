@@ -1,8 +1,11 @@
-import { Entity, Column, ManyToOne, JoinTable, ManyToMany, Check } from "typeorm";
+import { Entity, Column, ManyToOne, JoinTable, ManyToMany, Check, JoinColumn, OneToOne } from "typeorm";
 import { DescEntry, Entry } from "./Entry";
 import { Category } from "./Category";
-import { Product } from "./Product";
 import { Field, Float, ObjectType } from "type-graphql";
+import { ArrayNotEmpty, IsNotEmpty, ValidateIf } from "class-validator";
+import { FileData } from "./File";
+import { Gallery } from "./Gallery";
+import { Tag } from "./Tag";
 
 @ObjectType({ implements: [DescEntry, Entry] })
 @Entity("shopitems")
@@ -24,8 +27,16 @@ export class ShopItem extends DescEntry {
     @Field(type => Category, { nullable: true })
     @ManyToOne(() => Category, (category) => category.shop_items, { nullable: true })
     category?: Category | null
-    @Field(type => [Product])
-    @ManyToMany(() => Product, (product) => product.shop_items)
+    @Field(type => [FileData], { nullable: "itemsAndList" })
+    @ArrayNotEmpty()
+    @ValidateIf(p => !p.galleries || p.galleries.length == 0)
+    @ManyToMany((type) => FileData, (file) => file.shop_items)
     @JoinTable()
-    products: Product[]
+    files: FileData[]
+    @Field(type => [Gallery], { nullable: "itemsAndList" })
+    @ArrayNotEmpty()
+    @ValidateIf(p => !p.files || p.files.length == 0)
+    @ManyToMany((type) => Gallery, (gallery) => gallery.shop_items)
+    @JoinTable()
+    galleries: Gallery[]
 }

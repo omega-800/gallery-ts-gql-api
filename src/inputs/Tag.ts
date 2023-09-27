@@ -9,5 +9,5 @@ export class CreateTagInput {
     @Field(type => String, { nullable: true })
     description?: string | null
     @Field(type => [String], { nullable: "itemsAndList" })
-    product_ids: string[]
+    file_ids: string[]
 }

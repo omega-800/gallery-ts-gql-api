@@ -1,4 +1,4 @@
-import { MaxLength } from "class-validator"
+import { ArrayNotEmpty, IsNotEmpty, MaxLength, ValidateIf } from "class-validator"
 import { Field, Float, InputType } from "type-graphql"
 
 @InputType()
@@ -18,6 +18,12 @@ export class CreateShopItemInput {
     available_to?: Date
     @Field(type => String, { nullable: true })
     category_id?: string | null
-    @Field(type => [String])
-    product_ids: string[]
+    @Field(type => [String], { nullable: "itemsAndList" })
+    @ArrayNotEmpty()
+    @ValidateIf(p => !p.gallery_ids || p.gallery_ids.length == 0)
+    file_ids?: string[] | null
+    @Field(type => [String], { nullable: "itemsAndList" })
+    @ArrayNotEmpty()
+    @ValidateIf(p => !p.file_ids || p.file_ids.length == 0)
+    gallery_ids?: string[] | null
 }

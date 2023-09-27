@@ -1,3 +1,4 @@
+\c gallery;
 drop schema public cascade;
 create schema public;
 grant usage on schema public to public;

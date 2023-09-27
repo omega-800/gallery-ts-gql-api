@@ -8,6 +8,6 @@ export class CreateGalleryInput {
     name: string
     @Field(type => [String])
     file_ids: string[];
-    @Field(type => String, { nullable: true })
-    product_id?: string | null
+    @Field(type => [String], { nullable: "itemsAndList" })
+    shop_item_ids?: string[] | null
 }

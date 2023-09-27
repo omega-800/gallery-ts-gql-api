@@ -6,10 +6,10 @@ export abstract class Entry {
     @Field(() => ID)
     @PrimaryGeneratedColumn("uuid")
     id: string
-    @Field()
+    @Field(type => Date)
     @CreateDateColumn({ type: "timestamptz" })
     date_added: Date
-    @Field()
+    @Field(type => Date)
     @UpdateDateColumn({ type: "timestamptz" })
     date_updated: Date
     @Field(type => Date, { nullable: true })

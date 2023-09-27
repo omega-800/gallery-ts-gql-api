@@ -2,9 +2,9 @@ import { Resolver, Query, Arg, Mutation } from "type-graphql";
 import { AppDataSource } from "../data-source";
 import { Tag } from "../entity/Tag";
 import { CreateTagInput } from "../inputs/Tag";
-import { Product } from "../entity/Product";
+import { FileData } from "../entity/File";
 
-const relationsAll = { relations: { products: true } }
+const relationsAll = { relations: { files: true } }
 
 @Resolver(of => Tag)
 class TagResolver {
@@ -19,13 +19,13 @@ class TagResolver {
     @Mutation(() => Tag)
     async create_tag(@Arg("data") data: CreateTagInput) {
         let repo = AppDataSource.getRepository(Tag);
-        let products: Product[] = [];
-        data.product_ids?.forEach(async id => {
-            let product = await AppDataSource.getRepository(Product).findOne({ where: { id } })
-            if (product) products.push(product)
+        let files: FileData[] = [];
+        data.file_ids?.forEach(async id => {
+            let file = await AppDataSource.getRepository(FileData).findOne({ where: { id } })
+            if (file) files.push(file)
         })
 
-        const tag = repo.create({ ...data, products: products });
+        const tag = repo.create({ ...data, files: files });
         await repo.save(tag);
         return tag;
     }

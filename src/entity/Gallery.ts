@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
 import { Entry } from "./Entry";
 import { FileData } from "./File";
-import { Product } from "./Product";
+import { ShopItem } from "./ShopItem";
 import { ObjectType, Field } from "type-graphql";
 
 @ObjectType({ implements: Entry })
@@ -14,7 +14,7 @@ export class Gallery extends Entry {
     @ManyToMany(() => FileData, (file) => file.galleries)
     @JoinTable()
     files: FileData[];
-    @Field(type => Product, { nullable: true })
-    @OneToOne((type) => Product, (product) => product.gallery, { nullable: true })
-    product?: Product | null
+    @Field(type => [ShopItem], { nullable: "itemsAndList" })
+    @ManyToMany(() => ShopItem, (shop_item) => shop_item.galleries)
+    shop_items: ShopItem[]
 }

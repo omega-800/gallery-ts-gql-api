@@ -1,11 +1,11 @@
 import { Resolver, Query, Arg, Mutation } from "type-graphql";
 import { AppDataSource } from "../data-source";
 import { Gallery } from "../entity/Gallery";
-import { Product } from "../entity/Product";
 import { CreateGalleryInput } from "../inputs/Gallery";
 import { FileData } from "../entity/File";
+import { ShopItem } from "../entity/ShopItem";
 
-const relationsAll = { relations: { files: true, product: true } }
+const relationsAll = { relations: { files: true, shop_items: true } }
 
 @Resolver(of => Gallery)
 class GalleryResolver {
@@ -21,14 +21,17 @@ class GalleryResolver {
     async create_gallery(@Arg("data") data: CreateGalleryInput) {
         let repo = AppDataSource.getRepository(Gallery);
         let files: FileData[] = [];
-        data.file_ids?.forEach(async id => {
+        data.file_ids.forEach(async id => {
             let file = await AppDataSource.getRepository(FileData).findOne({ where: { id } })
             if (file) files.push(file)
         })
-        let product;
-        if (data.product_id) product = await AppDataSource.getRepository(Product).findOne({ where: { id: data.product_id } })
+        let shop_items: ShopItem[] = [];
+        data.shop_item_ids?.forEach(async id => {
+            let shop_item = await AppDataSource.getRepository(ShopItem).findOne({ where: { id } })
+            if (shop_item) shop_items.push(shop_item)
+        })
 
-        const gallery = repo.create({ ...data, files: files, product: product });
+        const gallery = repo.create({ ...data, files: files, shop_items: shop_items });
         await repo.save(gallery);
         return gallery;
     }

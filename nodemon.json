@@ -1,0 +1,10 @@
+{
+    "watch": [
+        "src/**/*.ts"
+    ],
+    "ext": "ts,json",
+    "ignore": [
+        "src/**/*.spec.ts"
+    ],
+    "exec": "tsc --noEmit && TS_NODE_TRANSPILE_ONLY=true ts-node src/index.ts"
+}
