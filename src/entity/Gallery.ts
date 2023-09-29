@@ -12,7 +12,6 @@ export class Gallery extends Entry {
     name: string
     @Field(type => [FileData])
     @ManyToMany(() => FileData, (file) => file.galleries)
-    @JoinTable()
     files: FileData[];
     @Field(type => [ShopItem], { nullable: "itemsAndList" })
     @ManyToMany(() => ShopItem, (shop_item) => shop_item.galleries)

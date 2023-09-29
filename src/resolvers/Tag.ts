@@ -1,8 +1,9 @@
 import { Resolver, Query, Arg, Mutation } from "type-graphql";
-import { AppDataSource } from "../data-source";
+import { AppDataSource, defOrder } from "../data-source";
 import { Tag } from "../entity/Tag";
 import { AlterTagInput, CreateTagInput } from "../inputs/Tag";
 import { FileData } from "../entity/File";
+import { In } from "typeorm";
 
 const relationsAll = { relations: { files: true }, withDeleted: true }
 
@@ -14,17 +15,12 @@ class TagResolver {
     }
     @Query(() => [Tag])
     async tags() {
-        return await AppDataSource.getRepository(Tag).find(relationsAll);
+        return await AppDataSource.getRepository(Tag).find({ ...relationsAll, ...defOrder });
     }
     @Mutation(() => Tag)
     async create_tag(@Arg("data") data: CreateTagInput) {
-        let repo = AppDataSource.getRepository(Tag);
-        let files: FileData[] = [];
-        data.file_ids?.forEach(async id => {
-            let file = await AppDataSource.getRepository(FileData).findOne({ where: { id } })
-            if (file) files.push(file)
-        })
-
+        const repo = AppDataSource.getRepository(Tag);
+        const files: FileData[] = data.file_ids ? await AppDataSource.getRepository(FileData).find({ where: { id: In(data.file_ids) }, ...defOrder }) : [];
         const tag = repo.create({ ...data, files: files });
         await repo.save(tag);
         return tag;

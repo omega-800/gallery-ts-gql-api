@@ -1,5 +1,5 @@
 import "reflect-metadata"
-import { DataSource } from "typeorm"
+import { DataSource, FindOptionsOrderValue } from "typeorm"
 import "dotenv/config"
 
 export const AppDataSource = new DataSource({
@@ -17,3 +17,5 @@ export const AppDataSource = new DataSource({
     migrations: [],
     subscribers: [],
 })
+
+export const defOrder = { order: { date_updated: "ASC" as FindOptionsOrderValue, date_added: "ASC" as FindOptionsOrderValue } }

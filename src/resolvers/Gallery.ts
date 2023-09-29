@@ -1,9 +1,10 @@
 import { Resolver, Query, Arg, Mutation } from "type-graphql";
-import { AppDataSource } from "../data-source";
+import { AppDataSource, defOrder } from "../data-source";
 import { Gallery } from "../entity/Gallery";
-import { CreateGalleryInput } from "../inputs/Gallery";
-import { FileData } from "../entity/File";
+import { AlterGalleryInput, CreateGalleryInput } from "../inputs/Gallery";
+import { FileData, Image, Video } from "../entity/File";
 import { ShopItem } from "../entity/ShopItem";
+import { In } from "typeorm";
 
 const relationsAll = { relations: { files: true, shop_items: true }, withDeleted: true }
 
@@ -15,24 +16,34 @@ class GalleryResolver {
     }
     @Query(() => [Gallery])
     async galleries() {
-        return await AppDataSource.getRepository(Gallery).find(relationsAll);
+        return await AppDataSource.getRepository(Gallery).find({ ...relationsAll, ...defOrder });
     }
     @Mutation(() => Gallery)
     async create_gallery(@Arg("data") data: CreateGalleryInput) {
         let repo = AppDataSource.getRepository(Gallery);
-        let files: FileData[] = [];
-        data.file_ids.forEach(async id => {
-            let file = await AppDataSource.getRepository(FileData).findOne({ where: { id } })
-            if (file) files.push(file)
-        })
-        let shop_items: ShopItem[] = [];
-        data.shop_item_ids?.forEach(async id => {
-            let shop_item = await AppDataSource.getRepository(ShopItem).findOne({ where: { id } })
-            if (shop_item) shop_items.push(shop_item)
-        })
+
+        const files: FileData[] = data.file_ids ? await AppDataSource.getRepository(FileData).find({ where: { id: In(data.file_ids) }, ...defOrder }) : [];
+        const shop_items: ShopItem[] = data.shop_item_ids ? await AppDataSource.getRepository(ShopItem).find({ where: { id: In(data.shop_item_ids) }, ...defOrder }) : [];
 
         const gallery = repo.create({ ...data, files: files, shop_items: shop_items });
         await repo.save(gallery);
         return gallery;
+    }
+    @Mutation(() => Gallery)
+    async delete_gallery(@Arg("id") id: string) {
+        await AppDataSource.getRepository(Gallery).softDelete(id)
+        return this.gallery(id);
+    }
+    @Mutation(() => Gallery)
+    async restore_gallery(@Arg("id") id: string) {
+        await AppDataSource.getRepository(Gallery).restore(id)
+        return this.gallery(id);
+    }
+    @Mutation(() => Gallery)
+    async alter_gallery(@Arg("data") data: AlterGalleryInput) {
+        const files: FileData[] = data.file_ids ? await AppDataSource.getRepository(FileData).find({ where: { id: In(data.file_ids) }, ...defOrder }) : [];
+        const shop_items: ShopItem[] = data.shop_item_ids ? await AppDataSource.getRepository(ShopItem).find({ where: { id: In(data.shop_item_ids) }, ...defOrder }) : [];
+        await AppDataSource.getRepository(Gallery).save({ ...data, files: files, shop_items: shop_items })
+        return this.gallery(data.id);
     }
 }

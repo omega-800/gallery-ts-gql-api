@@ -1,14 +1,14 @@
 import { Resolver, Query, Arg, Mutation } from "type-graphql";
-import { AppDataSource } from "../data-source";
+import { AppDataSource, defOrder, } from "../data-source";
 import { ShopItem } from "../entity/ShopItem";
 import { validate } from "class-validator";
 import { CreateShopItemInput } from "../inputs/ShopItem";
 import { Category } from "../entity/Category";
 import { FileData } from "../entity/File";
 import { Gallery } from "../entity/Gallery";
+import { FindOptionsOrderValue, In } from "typeorm";
 
 const relationsAll = { relations: { files: true, galleries: true, category: true }, withDeleted: true }
-
 @Resolver(of => ShopItem)
 class ShopItemResolver {
     @Query(() => ShopItem)
@@ -17,7 +17,7 @@ class ShopItemResolver {
     }
     @Query(() => [ShopItem])
     async shop_items() {
-        return await AppDataSource.getRepository(ShopItem).find(relationsAll);
+        return await AppDataSource.getRepository(ShopItem).find({ ...relationsAll, ...defOrder });
     }
     @Mutation(() => ShopItem)
     async create_shop_item(@Arg("data") data: CreateShopItemInput) {
@@ -30,17 +30,8 @@ class ShopItemResolver {
             return errors
         }
 
-        let galleries: Gallery[] = [];
-        data.gallery_ids?.forEach(async id => {
-            let gallery = await AppDataSource.getRepository(Gallery).findOne({ where: { id } })
-            if (gallery) galleries.push(gallery)
-        })
-
-        let files: FileData[] = [];
-        data.file_ids?.forEach(async id => {
-            let file = await AppDataSource.getRepository(FileData).findOne({ where: { id } })
-            if (file) files.push(file)
-        })
+        const galleries: Gallery[] = data.gallery_ids ? await AppDataSource.getRepository(Gallery).find({ where: { id: In(data.gallery_ids) }, ...defOrder }) : [];
+        const files: FileData[] = data.file_ids ? await AppDataSource.getRepository(FileData).find({ where: { id: In(data.file_ids) }, ...defOrder }) : [];
 
         let category;
         if (data.category_id) category = await AppDataSource.getRepository(Category).findOne({ where: { id: data.category_id } })

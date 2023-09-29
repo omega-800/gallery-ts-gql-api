@@ -1,8 +1,9 @@
 import { Resolver, Query, Arg, Mutation } from "type-graphql";
-import { AppDataSource } from "../data-source";
+import { AppDataSource, defOrder } from "../data-source";
 import { Category } from "../entity/Category";
 import { ShopItem } from "../entity/ShopItem";
 import { CreateCategoryInput } from "../inputs/Category";
+import { In } from "typeorm";
 
 const relationsAll = { relations: { shop_items: true }, withDeleted: true }
 
@@ -14,17 +15,13 @@ class CategoryResolver {
     }
     @Query(() => [Category])
     async categories() {
-        return await AppDataSource.getRepository(Category).find(relationsAll);
+        return await AppDataSource.getRepository(Category).find({ ...relationsAll, ...defOrder });
     }
     @Mutation(() => Category)
     async create_category(@Arg("data") data: CreateCategoryInput) {
-        let repo = AppDataSource.getRepository(Category);
+        const repo = AppDataSource.getRepository(Category);
 
-        let shop_items: ShopItem[] = [];
-        data.shop_item_ids?.forEach(async id => {
-            let shop_item = await AppDataSource.getRepository(ShopItem).findOne({ where: { id } })
-            if (shop_item) shop_items.push(shop_item)
-        })
+        const shop_items: ShopItem[] = data.shop_item_ids ? await AppDataSource.getRepository(ShopItem).find({ where: { id: In(data.shop_item_ids) }, ...defOrder }) : [];
 
         const category = repo.create({ ...data, shop_items: shop_items });
         await repo.save(category);

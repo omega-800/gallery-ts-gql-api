@@ -1,5 +1,5 @@
 import { MaxLength } from "class-validator";
-import { InputType, Field } from "type-graphql";
+import { InputType, Field, ID } from "type-graphql";
 
 @InputType()
 export class CreateGalleryInput {
@@ -8,6 +8,21 @@ export class CreateGalleryInput {
     name: string
     @Field(type => [String])
     file_ids: string[];
+    @Field(type => [String], { nullable: "itemsAndList" })
+    shop_item_ids?: string[]
+    @Field(type => Boolean, { nullable: true })
+    favorite?: boolean
+}
+
+@InputType()
+export class AlterGalleryInput {
+    @Field(() => ID)
+    id: string
+    @Field({ nullable: true })
+    @MaxLength(200)
+    name?: string
+    @Field(type => [String], { nullable: "itemsAndList" })
+    file_ids?: string[];
     @Field(type => [String], { nullable: "itemsAndList" })
     shop_item_ids?: string[]
     @Field(type => Boolean, { nullable: true })

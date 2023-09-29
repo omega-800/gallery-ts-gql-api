@@ -45,6 +45,7 @@ export abstract class FileData extends NamedEntry {
     edited: boolean
     @Field(type => [Gallery], { nullable: "itemsAndList" })
     @ManyToMany(() => Gallery, (gallery) => gallery.files)
+    @JoinTable()
     galleries: Gallery[];
     @Field(type => [Tag], { nullable: "itemsAndList" })
     @ManyToMany(() => Tag, (tag) => tag.files)
