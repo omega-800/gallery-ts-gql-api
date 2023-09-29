@@ -1,7 +1,7 @@
 import { Resolver, Query, Arg, Mutation } from "type-graphql";
 import { FileData, Image, Video } from "../entity/File";
 import { AppDataSource } from "../data-source";
-import { CreateImageInput, CreateVideoInput } from "../inputs/File";
+import { AlterImageInput, AlterVideoInput, CreateImageInput, CreateVideoInput } from "../inputs/File";
 import { Gallery } from "../entity/Gallery";
 import { ShopItem } from "../entity/ShopItem";
 import { Tag } from "../entity/Tag";
@@ -45,7 +45,7 @@ class FileResolver {
             if (shop_item) shop_items.push(shop_item)
         })
 
-        const image = repo.create({ ...data, galleries: galleries, tags: tags, shop_items: shop_items, edited: data.edited || false, favorite: data.favorite || false });
+        const image = repo.create({ ...data, galleries: galleries, tags: tags, shop_items: shop_items, });
         await repo.save(image);
         return image;
     }
@@ -68,7 +68,7 @@ class FileResolver {
             if (shop_item) shop_items.push(shop_item)
         })
 
-        const video = repo.create({ ...data, galleries: galleries, tags: tags, shop_items: shop_items, edited: data.edited || false, favorite: data.favorite || false });
+        const video = repo.create({ ...data, galleries: galleries, tags: tags, shop_items: shop_items });
         await repo.save(video);
         return video;
     }
@@ -82,10 +82,46 @@ class FileResolver {
         await AppDataSource.getRepository(FileData).restore(id)
         return this.file(id);
     }
-    @Mutation(() => FileData)
-    async set_favorite(@Arg("id") id: string, @Arg("favorite") favorite: boolean) {
+    @Mutation(() => Image)
+    async alter_image(@Arg("data") data: AlterImageInput) {
+        let galleries: Gallery[] = [];
+        data.gallery_ids?.forEach(async id => {
+            let gallery = await AppDataSource.getRepository(Gallery).findOne({ where: { id } })
+            if (gallery) galleries.push(gallery)
+        })
+        let tags: Tag[] = [];
+        data.tag_ids?.forEach(async id => {
+            let tag = await AppDataSource.getRepository(Tag).findOne({ where: { id } })
+            if (tag) tags.push(tag)
+        })
+        let shop_items: ShopItem[] = [];
+        data.shop_item_ids?.forEach(async id => {
+            let shop_item = await AppDataSource.getRepository(ShopItem).findOne({ where: { id } })
+            if (shop_item) shop_items.push(shop_item)
+        })
         //await AppDataSource.getRepository(FileData).update({ id }, { favorite })
-        await AppDataSource.getRepository(FileData).save({ id, favorite })
-        return this.file(id);
+        await AppDataSource.getRepository(Image).save({ ...data, galleries: galleries, tags: tags, shop_items: shop_items })
+        return this.file(data.id);
+    }
+    @Mutation(() => Video)
+    async alter_video(@Arg("data") data: AlterVideoInput) {
+        let galleries: Gallery[] = [];
+        data.gallery_ids?.forEach(async id => {
+            let gallery = await AppDataSource.getRepository(Gallery).findOne({ where: { id } })
+            if (gallery) galleries.push(gallery)
+        })
+        let tags: Tag[] = [];
+        data.tag_ids?.forEach(async id => {
+            let tag = await AppDataSource.getRepository(Tag).findOne({ where: { id } })
+            if (tag) tags.push(tag)
+        })
+        let shop_items: ShopItem[] = [];
+        data.shop_item_ids?.forEach(async id => {
+            let shop_item = await AppDataSource.getRepository(ShopItem).findOne({ where: { id } })
+            if (shop_item) shop_items.push(shop_item)
+        })
+        //await AppDataSource.getRepository(FileData).update({ id }, { favorite })
+        await AppDataSource.getRepository(Video).save({ ...data, galleries: galleries, tags: tags, shop_items: shop_items })
+        return this.file(data.id);
     }
 }

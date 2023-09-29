@@ -43,9 +43,6 @@ export abstract class FileData extends NamedEntry {
     @Field()
     @Column({ default: false })
     edited: boolean
-    @Field()
-    @Column({ default: false })
-    favorite: boolean
     @Field(type => [Gallery], { nullable: "itemsAndList" })
     @ManyToMany(() => Gallery, (gallery) => gallery.files)
     galleries: Gallery[];
@@ -62,7 +59,7 @@ export abstract class FileData extends NamedEntry {
 export class Image extends FileData {
     @Field(type => String, { nullable: true })
     @Column({ type: "varchar", nullable: true })
-    alt?: string | null
+    alt?: string
 }
 
 @ObjectType({ implements: [FileData, NamedEntry, Entry] })

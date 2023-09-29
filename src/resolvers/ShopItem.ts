@@ -7,7 +7,7 @@ import { Category } from "../entity/Category";
 import { FileData } from "../entity/File";
 import { Gallery } from "../entity/Gallery";
 
-const relationsAll = { relations: { files: true, galleries: true, category: true } }
+const relationsAll = { relations: { files: true, galleries: true, category: true }, withDeleted: true }
 
 @Resolver(of => ShopItem)
 class ShopItemResolver {

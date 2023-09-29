@@ -23,7 +23,7 @@ export class ShopItem extends DescEntry {
     available_from: Date
     @Field(type => Date, { nullable: true })
     @Column({ type: "timestamptz", nullable: true })
-    available_to?: Date | null
+    available_to?: Date
     @Field(type => Category, { nullable: true })
     @ManyToOne(() => Category, (category) => category.shop_items, { nullable: true })
     category?: Category | null

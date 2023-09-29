@@ -14,14 +14,17 @@ export abstract class Entry {
     date_updated: Date
     @Field(type => Date, { nullable: true })
     @DeleteDateColumn({ type: "timestamptz", nullable: true })
-    date_deleted?: Date | null
+    date_deleted?: Date
+    @Field()
+    @Column({ default: false })
+    favorite: boolean
 }
 
 @InterfaceType(/* { implements: Entry } */)
 export abstract class NamedEntry extends Entry {
     @Field(type => String, { nullable: true })
     @Column({ type: "varchar", nullable: true, length: 200 })
-    name?: string | null
+    name?: string
 }
 
 @InterfaceType(/* { implements: Entry } */)
@@ -31,7 +34,7 @@ export abstract class DescEntry extends Entry {
     name: string
     @Field(type => String, { nullable: true })
     @Column({ type: "text", nullable: true })
-    description?: string | null
+    description?: string
 }
 
 @InterfaceType(/* { implements: Entry } */)
@@ -41,5 +44,5 @@ export abstract class UniqueNamedEntry extends Entry {
     name: string
     @Field(type => String, { nullable: true })
     @Column({ type: "text", nullable: true })
-    description?: string | null
+    description?: string
 }

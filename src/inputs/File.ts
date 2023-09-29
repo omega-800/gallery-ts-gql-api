@@ -5,9 +5,9 @@ import { MaxLength } from "class-validator";
 export class CreateImageInput {
     @Field(type => String, { nullable: true })
     @MaxLength(200)
-    name?: string | null
+    name?: string
     @Field(type => String, { nullable: true })
-    alt?: string | null
+    alt?: string
     /*@Field()
     url: string
     @Field()
@@ -29,22 +29,43 @@ export class CreateImageInput {
     @Field(type => Int)
     height_prev: number
     @Field(type => Boolean, { nullable: true })
-    edited?: boolean | null
+    edited?: boolean
     @Field(type => Boolean, { nullable: true })
-    favorite?: boolean | null
+    favorite?: boolean
     @Field(type => [ID], { nullable: "itemsAndList" })
-    gallery_ids?: string[] | null;
+    gallery_ids?: string[];
     @Field(type => [ID], { nullable: "itemsAndList" })
-    shop_item_ids?: string[] | null
+    shop_item_ids?: string[]
     @Field(type => [ID], { nullable: "itemsAndList" })
-    tag_ids?: string[] | null
+    tag_ids?: string[]
+}
+
+@InputType()
+export class AlterImageInput {
+    @Field(() => ID)
+    id: string
+    @Field(type => String, { nullable: true })
+    @MaxLength(200)
+    name?: string
+    @Field(type => String, { nullable: true })
+    alt?: string
+    @Field(type => Boolean, { nullable: true })
+    edited?: boolean
+    @Field(type => Boolean, { nullable: true })
+    favorite?: boolean
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    gallery_ids?: string[];
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    shop_item_ids?: string[]
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    tag_ids?: string[]
 }
 
 @InputType()
 export class CreateVideoInput {
     @Field(type => String, { nullable: true })
     @MaxLength(200)
-    name?: string | null
+    name?: string
     @Field(type => Float)
     duration: number
     /*@Field()
@@ -72,13 +93,32 @@ export class CreateVideoInput {
     @Field(type => Float)
     fps_prev: number
     @Field(type => Boolean, { nullable: true })
-    edited?: boolean | null
+    edited?: boolean
     @Field(type => Boolean, { nullable: true })
-    favorite?: boolean | null
+    favorite?: boolean
     @Field(type => [ID], { nullable: "itemsAndList" })
-    gallery_ids?: string[] | null;
+    gallery_ids?: string[];
     @Field(type => [ID], { nullable: "itemsAndList" })
-    shop_item_ids?: string[] | null
+    shop_item_ids?: string[]
     @Field(type => [ID], { nullable: "itemsAndList" })
-    tag_ids?: string[] | null
+    tag_ids?: string[]
+}
+
+@InputType()
+export class AlterVideoInput {
+    @Field(() => ID)
+    id: string
+    @Field(type => String, { nullable: true })
+    @MaxLength(200)
+    name?: string
+    @Field(type => Boolean, { nullable: true })
+    edited?: boolean
+    @Field(type => Boolean, { nullable: true })
+    favorite?: boolean
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    gallery_ids?: string[];
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    shop_item_ids?: string[]
+    @Field(type => [ID], { nullable: "itemsAndList" })
+    tag_ids?: string[]
 }

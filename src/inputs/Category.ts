@@ -7,7 +7,9 @@ export class CreateCategoryInput {
     @MaxLength(200)
     name: string
     @Field(type => String, { nullable: true })
-    description?: string | null
+    description?: string
     @Field(type => [String], { nullable: "itemsAndList" })
     shop_item_ids?: string[]
+    @Field(type => Boolean, { nullable: true })
+    favorite?: boolean
 }

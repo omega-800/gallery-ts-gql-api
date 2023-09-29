@@ -4,7 +4,7 @@ import { Category } from "../entity/Category";
 import { ShopItem } from "../entity/ShopItem";
 import { CreateCategoryInput } from "../inputs/Category";
 
-const relationsAll = { relations: { shop_items: true } }
+const relationsAll = { relations: { shop_items: true }, withDeleted: true }
 
 @Resolver(of => Category)
 class CategoryResolver {

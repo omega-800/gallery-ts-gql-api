@@ -5,7 +5,7 @@ import { CreateGalleryInput } from "../inputs/Gallery";
 import { FileData } from "../entity/File";
 import { ShopItem } from "../entity/ShopItem";
 
-const relationsAll = { relations: { files: true, shop_items: true } }
+const relationsAll = { relations: { files: true, shop_items: true }, withDeleted: true }
 
 @Resolver(of => Gallery)
 class GalleryResolver {

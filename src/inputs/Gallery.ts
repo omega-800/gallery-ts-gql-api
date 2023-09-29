@@ -9,5 +9,7 @@ export class CreateGalleryInput {
     @Field(type => [String])
     file_ids: string[];
     @Field(type => [String], { nullable: "itemsAndList" })
-    shop_item_ids?: string[] | null
+    shop_item_ids?: string[]
+    @Field(type => Boolean, { nullable: true })
+    favorite?: boolean
 }

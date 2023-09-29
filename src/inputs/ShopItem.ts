@@ -7,7 +7,7 @@ export class CreateShopItemInput {
     @MaxLength(200)
     name: string
     @Field(type => String, { nullable: true })
-    description?: string | null
+    description?: string
     @Field(type => Float)
     price: number
     @Field(type => Boolean, { nullable: true })
@@ -17,13 +17,15 @@ export class CreateShopItemInput {
     @Field(type => Date, { nullable: true })
     available_to?: Date
     @Field(type => String, { nullable: true })
-    category_id?: string | null
+    category_id?: string
     @Field(type => [String], { nullable: "itemsAndList" })
     @ArrayNotEmpty()
     @ValidateIf(p => !p.gallery_ids || p.gallery_ids.length == 0)
-    file_ids?: string[] | null
+    file_ids?: string[]
     @Field(type => [String], { nullable: "itemsAndList" })
     @ArrayNotEmpty()
     @ValidateIf(p => !p.file_ids || p.file_ids.length == 0)
-    gallery_ids?: string[] | null
+    gallery_ids?: string[]
+    @Field(type => Boolean, { nullable: true })
+    favorite?: boolean
 }
