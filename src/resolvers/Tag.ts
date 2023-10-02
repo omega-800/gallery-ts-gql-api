@@ -9,6 +9,10 @@ const relationsAll = { relations: { files: true }, withDeleted: true }
 
 @Resolver(of => Tag)
 class TagResolver {
+    @Query(() => Boolean)
+    async tag_name_exists(@Arg("name") name: string) {
+        return await AppDataSource.getRepository(Tag).exist({ where: { name } })
+    }
     @Query(() => Tag)
     async tag(@Arg("id") id: string) {
         return await AppDataSource.getRepository(Tag).findOne({ where: { id }, ...relationsAll })
@@ -41,4 +45,3 @@ class TagResolver {
         return this.tag(data.id);
     }
 }
-

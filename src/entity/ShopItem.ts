@@ -9,8 +9,8 @@ import { Tag } from "./Tag";
 
 @ObjectType({ implements: [DescEntry, Entry] })
 @Entity("shopitems")
-@Check('"price" > 0')
-@Check('"available_to" IS NULL OR "available_to" > CURRENT_TIMESTAMP')
+/* @Check('"price" > 0')
+@Check('"available_to" IS NULL OR "available_to" > CURRENT_TIMESTAMP') */
 export class ShopItem extends DescEntry {
     @Field(type => Float)
     @Column("decimal")

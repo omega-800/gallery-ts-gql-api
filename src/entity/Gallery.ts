@@ -1,15 +1,12 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
-import { Entry } from "./Entry";
+import { DescEntry, Entry } from "./Entry";
 import { FileData } from "./File";
 import { ShopItem } from "./ShopItem";
 import { ObjectType, Field } from "type-graphql";
 
-@ObjectType({ implements: Entry })
+@ObjectType({ implements: [DescEntry, Entry] })
 @Entity("galleries")
-export class Gallery extends Entry {
-    @Field()
-    @Column({ type: "varchar", length: 200 })
-    name: string
+export class Gallery extends DescEntry {
     @Field(type => [FileData])
     @ManyToMany(() => FileData, (file) => file.galleries)
     files: FileData[];

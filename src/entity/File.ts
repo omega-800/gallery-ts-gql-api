@@ -1,15 +1,15 @@
 import { Entity, Column, Check, TableInheritance, ChildEntity, JoinTable, ManyToMany, JoinColumn, OneToOne } from 'typeorm'
 import { Tag } from './Tag';
-import { NamedEntry, Entry } from './Entry';
+import { DescEntry, Entry } from './Entry';
 import { Gallery } from './Gallery';
 import { ShopItem } from './ShopItem';
 import { InterfaceType, Field, ObjectType, Int, Float } from 'type-graphql';
 
-@InterfaceType({ implements: [NamedEntry, Entry] })
+@InterfaceType({ implements: [DescEntry, Entry] })
 @Entity("files")
 @TableInheritance({ column: { type: "varchar", name: "type" } })
 //@Check("(type = 'Image' AND file_type IN ('png', 'jpg', 'jpeg', 'gif', 'avif', 'webp')) OR (type = 'Video' AND file_type IN ('mp4', 'mov'))")
-export abstract class FileData extends NamedEntry {
+export abstract class FileData extends DescEntry {
     /*@Field()
     @Column({ type: "varchar" })
     url: string
@@ -53,17 +53,16 @@ export abstract class FileData extends NamedEntry {
     @Field(type => [ShopItem], { nullable: "itemsAndList" })
     @ManyToMany(() => ShopItem, (shop_item) => shop_item.files)
     shop_items: ShopItem[]
-}
-
-@ObjectType({ implements: [FileData, NamedEntry, Entry] })
-@ChildEntity()
-export class Image extends FileData {
     @Field(type => String, { nullable: true })
     @Column({ type: "varchar", nullable: true })
     alt?: string
 }
 
-@ObjectType({ implements: [FileData, NamedEntry, Entry] })
+@ObjectType({ implements: [FileData, DescEntry, Entry] })
+@ChildEntity()
+export class Image extends FileData { }
+
+@ObjectType({ implements: [FileData, DescEntry, Entry] })
 @ChildEntity()
 export class Video extends FileData {
     @Field(type => Float)

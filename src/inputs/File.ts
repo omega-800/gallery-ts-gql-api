@@ -7,6 +7,8 @@ export class CreateImageInput {
     @MaxLength(200)
     name?: string
     @Field(type => String, { nullable: true })
+    description?: string
+    @Field(type => String, { nullable: true })
     alt?: string
     /*@Field()
     url: string
@@ -48,6 +50,8 @@ export class AlterImageInput {
     @MaxLength(200)
     name?: string
     @Field(type => String, { nullable: true })
+    description?: string
+    @Field(type => String, { nullable: true })
     alt?: string
     @Field(type => Boolean, { nullable: true })
     edited?: boolean
@@ -66,8 +70,12 @@ export class CreateVideoInput {
     @Field(type => String, { nullable: true })
     @MaxLength(200)
     name?: string
+    @Field(type => String, { nullable: true })
+    description?: string
     @Field(type => Float)
     duration: number
+    @Field(type => String, { nullable: true })
+    alt?: string
     /*@Field()
     url: string
     @Field()
@@ -111,6 +119,10 @@ export class AlterVideoInput {
     @Field(type => String, { nullable: true })
     @MaxLength(200)
     name?: string
+    @Field(type => String, { nullable: true })
+    description?: string
+    @Field(type => String, { nullable: true })
+    alt?: string
     @Field(type => Boolean, { nullable: true })
     edited?: boolean
     @Field(type => Boolean, { nullable: true })

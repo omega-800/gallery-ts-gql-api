@@ -21,17 +21,10 @@ export abstract class Entry {
 }
 
 @InterfaceType(/* { implements: Entry } */)
-export abstract class NamedEntry extends Entry {
-    @Field(type => String, { nullable: true })
-    @Column({ type: "varchar", nullable: true, length: 200 })
-    name?: string
-}
-
-@InterfaceType(/* { implements: Entry } */)
 export abstract class DescEntry extends Entry {
-    @Field()
-    @Column({ type: "varchar", length: 200 })
-    name: string
+    @Field(type => String, { nullable: true })
+    @Column({ type: "varchar", length: 200, nullable: true })
+    name?: string
     @Field(type => String, { nullable: true })
     @Column({ type: "text", nullable: true })
     description?: string
@@ -45,4 +38,7 @@ export abstract class UniqueNamedEntry extends Entry {
     @Field(type => String, { nullable: true })
     @Column({ type: "text", nullable: true })
     description?: string
+    @Field(type => String, { nullable: true })
+    @Column({ type: "varchar", length: 22, nullable: true })
+    color?: string
 }
