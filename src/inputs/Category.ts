@@ -24,7 +24,7 @@ export class CreateCategoryInput {
 export class AlterCategoryInput {
     @Field(() => ID)
     id: string
-    @Field()
+    @Field(type => String, { nullable: true })
     @MaxLength(200)
     name?: string
     @Field(type => String, { nullable: true })
